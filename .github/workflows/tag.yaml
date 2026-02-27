@@ -11,8 +11,8 @@ env:
 
 jobs:
   converge-github:
-    name: Build To Github
-    runs-on: ubuntu-24.04
+    name: Skaffold Build To Github
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -45,8 +45,8 @@ jobs:
       - uses: shrink/actions-docker-extract@v3
         id: extract
         with:
-          image: ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_REF_NAME}
-          path: "/usr/local/bin/bridgeless-core"
+          image: ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME
+          path: "/usr/local/bin/bridgeless-signer"
 
       - uses: ncipollo/release-action@v1
         id: create-release
@@ -62,6 +62,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ${{steps.extract.outputs.destination}}/bridgeless-core
-          asset_name: bridgeless-core-alpine-linux-amd64
+          asset_path: ${{steps.extract.outputs.destination}}/bridgeless-signer
+          asset_name: bridgeless-signer-alpine-linux-amd64
           asset_content_type: application/octet-stream
